@@ -17,12 +17,28 @@ class Sport(models.Model):
         return self.name
 
 
-class Team(models.Model):
+class Championship(models.Model):
     name = models.CharField(max_length=100)
     sport = models.ForeignKey(Sport, on_delete=models.CASCADE, related_name='sport')
     
     def __str__(self):
         return f'{self.name} - {self.sport.name} - {self.sport.country.name}'
+
+
+class Round(models.Model):
+    name = models.CharField(max_length=100)
+    championship = models.ForeignKey(Championship, on_delete=models.CASCADE, related_name='championship')
+    
+    def __str__(self):
+        return f'{self.pk} - {self.name} - {self.championship.name}'
+
+
+class Team(models.Model):
+    name = models.CharField(max_length=100)
+    championship = models.ManyToManyField(Championship, related_name='championships')
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Match(models.Model):
@@ -31,9 +47,10 @@ class Match(models.Model):
     date = models.DateField()
     result_home = models.PositiveIntegerField(null=True, blank=True)
     result_away = models.PositiveIntegerField(null=True, blank=True)
+    round = models.ManyToManyField(Round, related_name='round')
 
     def __str__(self):
-        return f'{self.team_home.name} vs. {self.team_away.name} ({self.date})'
+        return f'{self.team_home.name} vs. {self.team_away.name} - {self.round.name} - ({self.date})'
 
 
 class Bet(models.Model):
