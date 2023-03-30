@@ -20,7 +20,7 @@ source venv/bin/activate
 ```
 
 Install the libraries
-```sh
+```py
 asgiref==3.6.0
 asttokens==2.2.1
 backcall==0.2.0
@@ -67,7 +67,7 @@ python manage.py startapp main
 ```
 
 Modify file settings.py the DATABASE parameter:
-```sh
+```py
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -98,7 +98,7 @@ CREATE DATABASE bet_argentina_soccer;
 ```
 
 Create a models and admin. For a simple admin:
-```sh
+```py
 from django.contrib import admin
 from .models import model_name
 
@@ -127,9 +127,9 @@ Las señales nos sirven para ejecutar acciones automaticamente luego que se haya
 
 Por ejemplo, queremos que luego de que se guarde el resultado de un partido (instancia Match) se actualicen todos los puntajes de las apuestas (que tienen como uno de sus campos la instancia Match).
 
-Para esto, (ya hemos creado la lógica de actualización de puntajes dentro de la instancia Bet, dentro de la función save) vamos a crear un función dentro del archivo signals.py.
+Para esto, (ya hemos creado la lógica de actualización de puntajes dentro de la instancia Bet, dentro de la función save) vamos a crear un función dentro del archivo **signals.py**.
 
-```sh
+```py
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .models import Match, Bet
@@ -141,16 +141,16 @@ def upload_score_bets(sender, instance, **kwargs):
         bet.save()
 ```
 
-Pero debemos sentar las bases para que esta función se ejecute. Esto se agrega al archivo app.py la siguiente función en la clase "NombreDeLaAppConfig".
+Pero debemos sentar las bases para que esta función se ejecute. Esto se agrega al archivo **app.py** la siguiente función en la clase "NombreDeLaAppConfig".
 
-```sh
+```py
 def ready(self):
         import NombreDeLaAppsignals
 ```
 
 En nuestro caso el NombreDeLaApp es main, entonces el archivo final queda asi:
 
-```sh
+```py
 from django.apps import AppConfig
 
 
