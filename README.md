@@ -85,8 +85,16 @@ Install postgres and create the database
 sudo -u postgres psql
 ```
 
+el nombre de la base de datos tiene que ser la misma que se definió dos pasos atrás en NAME (en este caso el nombre de la base de datos sería "bet_argentina_soccer").
+
 ```sql
-CREATE DATABASE nombre_proyect;
+CREATE DATABASE nombre_de_la_base_de_dtos;
+```
+
+Si lo hacemos para este proyecto sería:
+
+```sql
+CREATE DATABASE bet_argentina_soccer;
 ```
 
 Create a models and admin. For a simple admin:
