@@ -97,6 +97,11 @@ from .models import model_name
 admin.site.register(Model_name)
 ```
 
+crear un superuser:
+```sh
+python manage.py createsuperuser
+```
+
 run makemigrations and migrate:
 ```sh
 python manage.py makemigrations
@@ -108,3 +113,43 @@ python manage.py migrate
 Enter to http://localhost:8000/admin/ with any browser
 
 
+## Signals
+
+Las señales nos sirven para ejecutar acciones automaticamente luego que se haya ejecutado una situación en una instancia.
+
+Por ejemplo, queremos que luego de que se guarde el resultado de un partido (instancia Match) se actualicen todos los puntajes de las apuestas (que tienen como uno de sus campos la instancia Match).
+
+Para esto, (ya hemos creado la lógica de actualización de puntajes dentro de la instancia Bet, dentro de la función save) vamos a crear un función dentro del archivo signals.py.
+
+```sh
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from .models import Match, Bet
+
+@receiver(post_save, sender=Match)
+def upload_score_bets(sender, instance, **kwargs):
+    bets = Bet.objects.filter(match=instance)
+    for bet in bets:
+        bet.save()
+```
+
+Pero debemos sentar las bases para que esta función se ejecute. Esto se agrega al archivo app.py la siguiente función en la clase "NombreDeLaAppConfig".
+
+```sh
+def ready(self):
+        import NombreDeLaAppsignals
+```
+
+En nuestro caso el NombreDeLaApp es main, entonces el archivo final queda asi:
+
+```sh
+from django.apps import AppConfig
+
+
+class MainConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'main'
+
+    def ready(self):
+        import main.signals
+```
