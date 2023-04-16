@@ -161,3 +161,122 @@ class MainConfig(AppConfig):
     def ready(self):
         import main.signals
 ```
+
+
+## Authentication
+
+The original documentation is: 
+
+https://docs.djangoproject.com/en/4.2/topics/auth/default/
+
+
+But, in the practice you have many ways to use the original athentication login. In summary, you have 2:
+1) Verify manually if the user is logged
+2) Used a decorator that do the same that the topic 1).
+
+### Login path
+
+First, in both cases you must create the login path.
+
+You must go to de **urls.py** and add the follow path:
+
+```py
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView
+```
+
+```py
+urlpatterns = [
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    ....
+]
+```
+
+In the above example you use the original template. But if you have a your specific login.html, you can use it:
+
+```py
+urlpatterns = [
+    path('login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
+    ....
+]
+```
+
+### Redirect 
+
+When an user tries to entry of a specific path that have a login requiered, after entry, django redirects to a default path that is **'accounts/profile/'**. But, if you what to change this path you can add the following line in **settings.py**:
+
+```py
+LOGIN_REDIRECT_URL = '/apuestas/'
+```
+
+or the path that you want.
+
+
+### CASE 1: login_required manually
+
+So, in this moment you have the login paht, the redirect path and you have all to add the lines in the view that you need have a login_required.
+
+The view class must be like this:
+
+```py
+def view_name(request):
+    if request.user.is_authenticated:
+        ...
+    else:
+        return redirect('login')
+```
+
+For example, I had the following view class:
+
+```py
+def bet_list(request):
+    user_bets = Bet.objects.filter(user=request.user)
+    context = {
+        'user_bets': user_bets
+    }
+    return render(request, 'bet_list.html', context)
+```
+
+And after of the login requiered manually:
+
+```py
+def bet_list(request):
+    if request.user.is_authenticated:
+        user_bets = Bet.objects.filter(user=request.user)
+        context = {
+            'user_bets': user_bets
+        }
+        return render(request, 'bet_list.html', context)
+    else:
+        return redirect('login')
+```
+
+
+### CASE 2: login_required decorator
+
+You can do the same easier. Only add one line:
+
+For example, I had the following view class:
+
+```py
+def bet_list(request):
+    user_bets = Bet.objects.filter(user=request.user)
+    context = {
+        'user_bets': user_bets
+    }
+    return render(request, 'bet_list.html', context)
+```
+
+And after of the login requiered decorator:
+
+```py
+@login_required(login_url="/login/")
+def bet_list(request):
+    user_bets = Bet.objects.filter(user=request.user)
+    context = {
+        'user_bets': user_bets
+    }
+    return render(request, 'bet_list.html', context)
+```

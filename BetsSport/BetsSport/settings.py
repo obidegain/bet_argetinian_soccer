@@ -132,3 +132,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SHELL_PLUS_PRE_IMPORTS = [
     ('app.models', '*'),
 ]
+
+LOGIN_REDIRECT_URL = '/apuestas/'

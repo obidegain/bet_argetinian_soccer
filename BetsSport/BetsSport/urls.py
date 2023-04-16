@@ -15,7 +15,16 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from main.views import bet_list, bet_edit, bet_list_edit
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('login/', auth_views.LoginView.as_view(), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('apuestas/', bet_list, name="bet_list"),
+    path('apuestas/editar/', bet_list_edit, name='bet_list_edit'),
+    path('apuestas/<int:pk>/editar/', bet_edit, name='bet_edit'),
 ]

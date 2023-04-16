@@ -1,0 +1,25 @@
+
+{% block content %}
+  <h1>Mis apuestas</h1>
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr>
+        <th>Partido</th>
+        <th class="text-center">Resultado local</th>
+        <th class="text-center">Resultado visitante</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bet in user_bets %}
+        <tr>
+          <td>{{ bet.match }}</td>
+          <td class="text-center">{{ bet.result_home }}</td>
+          <td class="text-center">{{ bet.result_away }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <div class="text-center">
+    <a href="{% url 'bet_list_edit' %}" class="btn btn-primary">Editar</a>
+  </div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% block content %}
+    <h1>Editar apuesta de {{ bet.user.username }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label for="result_home">Goles local:</label>
+        <input type="number" name="result_home" id="result_home" value="{{ bet.result_home }}" min="1" max="100">
+        <br>
+        <label for="result_away">Goles visitante:</label>
+        <input type="number" name="result_away" id="result_away" value="{{ bet.result_away }}" min="1" max="100">
+        <br>
+        <input type="submit" value="Guardar cambios">
+    </form>
+{% endblock %}
