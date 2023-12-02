@@ -50,6 +50,7 @@ Werkzeug==2.2.3
 
 if you have a problem to install psycopg2, try:
 ```sh
+sudo apt install python3-dev libpq-dev
 pip3 install psycopg2
 ```
 
