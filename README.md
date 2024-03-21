@@ -119,6 +119,26 @@ crear un superuser:
 python manage.py createsuperuser
 ```
 
+to complete all migrations, you must be add the apps that you has been created to settings:
+```py
+INSTALLED_APPS = [
+    'name_of_your_app',
+]
+```
+run makemigrations and migrate:
+```sh
+python manage.py makemigrations
+```
+```sh
+python manage.py migrate
+```
+
+runserser:
+```sh
+python manage.py runserver
+```
+
+
 Enter to http://localhost:8000/admin/ with any browser
 
 
