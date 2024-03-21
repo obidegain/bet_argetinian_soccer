@@ -106,17 +106,17 @@ from .models import model_name
 admin.site.register(Model_name)
 ```
 
-crear un superuser:
-```sh
-python manage.py createsuperuser
-```
-
 run makemigrations and migrate:
 ```sh
 python manage.py makemigrations
 ```
 ```sh
 python manage.py migrate
+```
+
+crear un superuser:
+```sh
+python manage.py createsuperuser
 ```
 
 Enter to http://localhost:8000/admin/ with any browser
